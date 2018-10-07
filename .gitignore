@@ -1,6 +1,8 @@
-controleDatabase\nbproject
-controleDatabase\build
+controleDatabase/nbproject
+controleDatabase/build
 *.log
-.env
-.mf
+*.env
+*.mf
+*.xml
 /controleDatabase/dist/
+.
