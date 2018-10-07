@@ -20,55 +20,78 @@ import javax.swing.JOptionPane;
 
 public class ConnectionFactory {
 
-    private static Connection connection;
+    private Connection connection;
 
     /**
      *
      * @return
      */
-    public static Connection getConnection() {
-        try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro de comunicação com o servidor de banco de dados "
-                    + "\n porque esta faltando um driver");
-        }
-        String url = "jdbc:sqlserver://DESKTOP-16MQ6QE\\SQLEXPRESS;databaseName=Web;user=sa;password=senhasa";
-        try {
-            connection = DriverManager.getConnection(url);
-            System.out.println(connection);
-        } // Erro caso o driver JDBC não foi instalado
-        catch (SQLException e) {
-            // Erro caso haja problemas para se conectar ao banco de dados
-            //   JOptionPane.showMessageDialog(null, "Ocorreu um erro ao tentar conectar-se ao servidor verifique se o nome do servidor "
-            //         + "\n e os dados de usuario e senha estão corretos.");
-
-            e.printStackTrace();
+    public Connection getConnection() throws Exception {
+        if (connection == null) {
+            try {
+                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            } catch (ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, "Ocorreu um erro de comunicação com o servidor de banco de dados "
+                        + "\n porque esta faltando um driver");
+            }
+            String url = "jdbc:sqlserver://DESKTOP-16MQ6QE\\SQLEXPRESS;databaseName=Web;user=sa;password=senhasa";
+            try {
+                connection = DriverManager.getConnection(url);
+                System.out.println(connection);
+            } // Erro caso o driver JDBC não foi instalado
+            catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
         }
         return connection;
     }
 
-    public static void fecharStmtERs(PreparedStatement stmt, ResultSet rs) {
-        //primeiro -- verificar se con esta aberto ou nao
-        //se for null e pq ta fechada
-        if (stmt != null && rs != null) {
+    public Connection getConnection(boolean beginTransaction) throws Exception {
+        if (connection == null) {
             try {
-                //fechar o statement
-                stmt.close();
-                rs.close();
-            } catch (SQLException ex) {
-                //printar no console em vermelho err
-                System.err.println("Captura do Erro" + ex);
+                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            } catch (ClassNotFoundException ex) {
+                throw new Exception("Ocorreu um erro de comunicação com o servidor de banco de dados "
+                        + "\n porque esta faltando um driver");
             }
+            String url = "jdbc:sqlserver://DESKTOP-16MQ6QE\\SQLEXPRESS;databaseName=Web;user=sa;password=senhasa";
+            try {
+                connection = DriverManager.getConnection(url);
+                System.out.println(connection);
+            } // Erro caso o driver JDBC não foi instalado
+            catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+        }
+        if (connection != null) {
+            connection.setAutoCommit(false);
+        }
+        return connection;
+    }
+    
+    public void commit() throws Exception {
+        try {
+            connection.commit();
+        } catch (Exception e) {
+        }
+        close();
+    }
+    
+    public void rolback() throws Exception{
+        try {            
+            connection.rollback();
+        } catch (Exception e) {
+        }            
+        close();
+    }
+    public void close() {
+        try {
+            connection.close();
+            connection = null;
+        } catch (Exception e) {
         }
     }
 
-    public static void close() {
-        try {
-            System.out.println("Fechando a conexão!");
-            connection.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 }

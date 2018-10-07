@@ -17,23 +17,23 @@ import PO.*;
  */
 public class businessObject {
 
-    carrinhoConnection carrinhoCon = new carrinhoConnection();
-    cashbackConnection cashbackCon = new cashbackConnection();
-    estabelecimentoConnection estabCon = new estabelecimentoConnection();
-    franquiaConnection franquiaCon = new franquiaConnection();
-    pedidoConnection pedidoCon = new pedidoConnection();
-    produtoConnection produtoCon = new produtoConnection();
-    usuarioConnection usuCon = new usuarioConnection();
-    saldoFranqSistConnection saldoFranqCon = new saldoFranqSistConnection();
+    DAOCarrinho carrinhoCon = new DAOCarrinho();
+    DAOCashback cashbackCon = new DAOCashback();
+    DAOEstabelecimento estabCon = new DAOEstabelecimento();
+    DAOFranquia franquiaCon = new DAOFranquia();
+    DAOPedido pedidoCon = new DAOPedido();
+    DAOProduto produtoCon = new DAOProduto();
+    DAOUsuario usuCon = new DAOUsuario();
+    DAOSaldoFranqSist saldoFranqCon = new DAOSaldoFranqSist();
     
     
     public void realizarVenda(int[] prods, int[] qtds, int idUsu, float total) throws SQLException {
-//        usuarioConnection usuCon = new usuarioConnection();
-//        pedidoConnection pedidoCon = new pedidoConnection();
-//        cashbackConnection cashbackCon = new cashbackConnection();
-//        produtoConnection produtoCon = new produtoConnection();
-//        carrinhoConnection carrinhoCon = new carrinhoConnection();
-//        saldoFranqSistConnection saldoFranqCon = new saldoFranqSistConnection();
+//        DAOUsuario usuCon = new DAOUsuario();
+//        DAOPedido pedidoCon = new DAOPedido();
+//        DAOCashback cashbackCon = new DAOCashback();
+//        DAOProduto produtoCon = new DAOProduto();
+//        DAOCarrinho carrinhoCon = new DAOCarrinho();
+//        DAOSaldoFranqSist saldoFranqCon = new DAOSaldoFranqSist();
         usuario usu = usuCon.getUsuarioPorId(idUsu);
         float cashbackPai = (float) (total * 0.05);
         float cashbackMF = cashbackPai;

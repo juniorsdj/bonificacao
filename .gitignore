@@ -3,3 +3,4 @@ controleDatabase\build
 *.log
 .env
 .mf
+/controleDatabase/dist/
